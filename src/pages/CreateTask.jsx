@@ -7,7 +7,6 @@ import {
   faX,
 } from '@fortawesome/free-solid-svg-icons';
 import { Controller, useForm } from 'react-hook-form';
-import Loading from '../components/Loading'
 import Input from '../components/inputs/Input';
 import DatePicker from '../components/inputs/DatePicker';
 import { useDispatch, useSelector } from 'react-redux';
@@ -46,8 +45,6 @@ const CreateTask = () => {
   );
 
   const { token } = useSelector((state) => state.account);
-
-  console.log(attachmentFiles)
 
   const onSubmit = async (data) => {
     try {
@@ -122,7 +119,7 @@ const CreateTask = () => {
           render={({ field }) => {
             return (
               <label className="flex flex-col gap-2 w-full">
-                <Input label="Name" placeholder="Task Name" {...field} />
+                <Input required label="Name" placeholder="Task Name" {...field} />
                 {errors?.title && (
                   <span className="text-red-500 text-[14px]">
                     {errors?.title?.message}
@@ -157,7 +154,7 @@ const CreateTask = () => {
             render={({ field }) => {
               return (
                 <label className='w-full flex flex-col gap-2'>
-                  <DatePicker label="End Date" {...field} />
+                  <DatePicker required label="End Date" {...field} />
                   {errors?.end_date && (
                     <span className="text-red-500 text-[14px]">
                       {errors?.end_date?.message}
@@ -349,6 +346,9 @@ const CreateTask = () => {
                       }}
                     />
                     <FontAwesomeIcon icon={faPaperclip} /> Attach
+                    <span className='mx-4'>
+                    <FontAwesomeIcon icon={faAdd} />
+                    </span>
                   </label>
                 );
               }}
@@ -362,7 +362,7 @@ const CreateTask = () => {
               render={() => {
                 return (
                   <Button
-                    value={isLoading ? <Loading /> : 'Submit'}
+                    value={isLoading ? 'Creating Task...' : 'Submit'}
                     primary
                     submit
                   />

@@ -7,6 +7,7 @@ import Register from './pages/Register';
 import CreateTask from './pages/CreateTask';
 import ListTasks from './pages/ListTasks';
 import TaskDetails from './pages/TaskDetails';
+import ProtectedRoutes from './outlets/ProtectedRoutes';
 
 const App = () => {
   return (
@@ -14,12 +15,14 @@ const App = () => {
       <ToastContainer />
       <Navbar />
       <Routes>
+        <Route element={<ProtectedRoutes />}>
         <Route path='/' element={<ListTasks />} />
         <Route path='/tasks' element={<ListTasks />} />
-        <Route path="/auth/login" element={<Login />} />
-        <Route path="/auth/register" element={<Register />} />
         <Route path='/tasks/create' element={<CreateTask />} />
         <Route path='/tasks/:id' element={<TaskDetails />} />
+        </Route>
+        <Route path="/auth/login" element={<Login />} />
+        <Route path="/auth/register" element={<Register />} />
       </Routes>
     </>
   );

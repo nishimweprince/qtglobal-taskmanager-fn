@@ -77,7 +77,6 @@ const Input = forwardRef(
       <input
         type={type || 'text'}
         name={name}
-        required={required}
         defaultValue={defaultValue}
         readOnly={readonly ? 'readOnly' : null}
         placeholder={placeholder}

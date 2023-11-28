@@ -39,7 +39,7 @@ export const apiSlice = createApi({
                 query: () => `/users/`
             }),
             listUserProjects: builder.query({
-                query: () => `/projects`
+                query: () => `/projects/all`
             }),
             listUserTasks: builder.query({
                 query: () => `/tasks`
