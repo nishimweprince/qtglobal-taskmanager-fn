@@ -21,7 +21,7 @@ const Navbar = () => {
       path: '/',
     },
     {
-      title: 'Tasks Management',
+      title: 'Tasks',
       path: '/tasks',
     },
   ];
@@ -33,9 +33,9 @@ const Navbar = () => {
   return (
     <nav className="w-[90%] mx-auto p-4 py-6 flex items-center justify-between relative">
       <section className="flex items-center gap-8">
-        <h1 className="text-[20px] text-primary font-semibold uppercase">
+        <Link to='/' className="text-[20px] text-primary font-semibold uppercase">
           Task Manager
-        </h1>
+        </Link>
         <ul className="flex items-center gap-2">
           {navMenu.map((item, index) => {
             return (

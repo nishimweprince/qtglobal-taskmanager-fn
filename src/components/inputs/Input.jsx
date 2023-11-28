@@ -13,7 +13,10 @@ const Input = forwardRef(
       placeholder,
       readonly,
       error,
-      onBlur
+      onBlur,
+      label = null,
+      labelClassName = null,
+      multiple = false
     },
     ref
   ) => {
@@ -21,13 +24,14 @@ const Input = forwardRef(
     if (type === 'radio') {
       return (
         <label
-          className={`flex w-full items-center gap-2 rounded-md text-[1rem] border border-gray-400 cursor-pointer p-4 ring-[.5px] ring-inset ring-gray-300 ${className}`}
+          className={`flex w-full items-center gap-2 rounded-md text-[1rem] cursor-pointer p-2 ring-[.1px] ring-inset ring-gray-300 ${className}`}
         >
           <input
             type={type}
+            name={name}
             onChange={onChange}
             defaultChecked={defaultValue}
-            className=''
+            className={className}
             value={defaultValue}
           />
           {placeholder}
@@ -37,20 +41,39 @@ const Input = forwardRef(
     
     if (type === 'file') {
       return (
-        <input
-          type={type || 'file'}
-          name={name}
-          required={false}
-          accept="image/*"
-          ref={ref}
-          className={`border border-gray-400 flex items-center justify-center px-4 py-[7px] text-[15px] w-full focus:border-[1.5px] focus:outline-none focus:border-primary rounded-md ring-[.5px] ring-inset ${
-            error ? 'ring-red-600' : 'ring-gray-300'
-          } ${className}`}
-        />
+        <label
+          className={`flex flex-col items-start gap-[6px] w-full ${labelClassName}`}
+        >
+          <p
+            className={`${
+              label ? 'flex' : 'null'
+            } flex items-center gap-[3px] font-medium text-[15px]`}
+          >
+            {label}{' '}
+            <span className={required ? 'text-red-600' : 'hidden'}>*</span>
+          </p>
+          <input
+            type={type || 'file'}
+            name={name}
+            required={false}
+            multiple={multiple}
+            accept="image/*"
+            ref={ref}
+            className={`border border-gray-400 flex items-center justify-center px-4 py-[7px] text-[15px] w-full focus:border-[1.5px] focus:outline-none focus:border-primary rounded-md ring-[.5px] ring-inset ${
+              error ? 'ring-red-600' : 'ring-gray-300'
+            } ${className}`}
+          />
+        </label>
       );
     }
 
     return (
+      <label className={`flex flex-col items-start gap-[6px] w-full ${labelClassName}`}>
+      <p className={`${label ? 'flex' : 'null'} flex items-center gap-[3px] font-medium text-[15px]`}>
+        {label}
+        {' '}
+        <span className={required ? 'text-red-600' : 'hidden'}>*</span>
+      </p>
       <input
         type={type || 'text'}
         name={name}
@@ -65,6 +88,7 @@ const Input = forwardRef(
           error ? 'ring-red-600' : 'ring-gray-300'
         } ${className}`}
       />
+      </label>
     );
   }
 );
@@ -82,7 +106,10 @@ Input.propTypes = {
   readonly: PropTypes.bool,
   error: PropTypes.bool,
   defaultValue: PropTypes.string,
-  onBlur: PropTypes.func
+  onBlur: PropTypes.func,
+  label: PropTypes.string,
+  labelClassName: PropTypes.string,
+  multiple: PropTypes.bool,
 };
 
 export default Input;

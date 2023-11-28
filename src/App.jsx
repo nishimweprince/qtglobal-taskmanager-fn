@@ -4,6 +4,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import Navbar from './containers/layout/Navbar';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import CreateTask from './pages/CreateTask';
+import ListTasks from './pages/ListTasks';
+import TaskDetails from './pages/TaskDetails';
 
 const App = () => {
   return (
@@ -11,8 +14,12 @@ const App = () => {
       <ToastContainer />
       <Navbar />
       <Routes>
+        <Route path='/' element={<ListTasks />} />
+        <Route path='/tasks' element={<ListTasks />} />
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/register" element={<Register />} />
+        <Route path='/tasks/create' element={<CreateTask />} />
+        <Route path='/tasks/:id' element={<TaskDetails />} />
       </Routes>
     </>
   );

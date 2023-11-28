@@ -18,6 +18,7 @@ const Button = forwardRef(
     ref
   ) => {
     if (submit) {
+
       return (
         <button
           ref={ref}
@@ -49,7 +50,7 @@ const Button = forwardRef(
         state={{ from: window.location.pathname }}
         className={`w-fit flex items-center ${
           primary
-            ? 'bg-primary text-secondary hover:bg-primary'
+            ? 'bg-primary text-white hover:bg-primary'
             : 'bg-white text-primary border-[1px] border-primary hover:bg-primary hover:text-white'
         } ${
           background === false
