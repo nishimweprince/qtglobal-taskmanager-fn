@@ -37,7 +37,6 @@ const TextArea = forwardRef(
           ref={ref}
           readOnly={readonly}
           placeholder={placeholder}
-          required={required}
           className={`border border-gray-400 flex items-center justify-center px-4 py-[8px] w-full focus:border-[1.5px] focus:outline-none focus:border-primary rounded-md ring-[.5px] ring-inset ${
             resize ? null : 'resize-none'
           } ${className}`}

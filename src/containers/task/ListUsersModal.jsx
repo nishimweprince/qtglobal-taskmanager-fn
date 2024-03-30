@@ -9,6 +9,8 @@ import { toast } from 'react-toastify';
 import { toastOptions } from '../../constants/Toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAdd } from '@fortawesome/free-solid-svg-icons';
+import { toggleCreateAssigneeModal } from '../../redux/features/assigneeSlice';
+import CreateAssignee from '../task/CreateAssignee'
 
 const ListUsersModal = ({ isOpen = false }) => {
   const dispatch = useDispatch();
@@ -36,9 +38,8 @@ const ListUsersModal = ({ isOpen = false }) => {
 
   return (
     <main
-      className={`${
-        isOpen ? 'flex overflow-y-hidden' : 'hidden'
-      } absolute items-center justify-center z-[10000] w-full h-screen bg-slate-500 bg-opacity-30 top-0 right-0 bottom-0 left-0`}
+      className={`${isOpen ? 'flex overflow-y-hidden' : 'hidden'
+        } absolute items-center justify-center z-[10000] w-full h-screen bg-slate-500 bg-opacity-30 top-0 right-0 bottom-0 left-0`}
     >
       <section
         className={`w-[45%] relative h-fit px-6 py-4 flex flex-col gap-4 items-start justify-start bg-white rounded-md shadow-md`}
@@ -47,9 +48,16 @@ const ListUsersModal = ({ isOpen = false }) => {
           <Loading />
         ) : (
           <section className="h-full flex flex-col items-center w-full gap-6 my-4">
-            <h1 className="text-primary font-medium uppercase">
-              Select users to assign on this task
-            </h1>
+            <menu className='flex items-center gap-3 justify-between w-full'>
+              <h1 className="text-primary font-medium uppercase">
+                Select users to assign on this task
+              </h1>
+              <Button primary value='Add new user' onClick={(e) => {
+                e.preventDefault();
+                dispatch(toggleCreateAssigneeModal(true))
+                dispatch(toggleListUsersModal(false))
+              }} />
+            </menu>
             <menu className="flex flex-col gap-2 w-full">
               {listUsersData?.data?.rows?.map((user, index) => {
                 return (
@@ -99,6 +107,7 @@ const ListUsersModal = ({ isOpen = false }) => {
           />
         </span>
       </section>
+      <CreateAssignee />
     </main>
   );
 };

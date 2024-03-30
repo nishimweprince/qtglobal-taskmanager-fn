@@ -42,13 +42,27 @@ export const apiSlice = createApi({
                 query: () => `/projects/all`
             }),
             listUserTasks: builder.query({
-                query: () => `/tasks`
+                query: ({ assignee_id }) => `/tasks/all?assignee_id=${assignee_id}`
             }),
             getTaskDetails: builder.query({
                 query: ({ id }) => `/tasks/${id}`
+            }),
+            createProject: builder.mutation({
+                query: ({ title, description }) => ({
+                    url: '/projects',
+                    method: 'POST',
+                    body: { title, description }
+                })
+            }),
+            updateTask: builder.mutation({
+                query: ({ id, status, title, priority, description }) => ({
+                    url: `/tasks/${id}`,
+                    method: 'PATCH',
+                    body: { status, title, priority, description }
+                })
             }),
         }
     }
 })
 
-export const { useLoginMutation, useRegisterMutation, useLazyListUsersQuery, useLazyListUserProjectsQuery, useLazyListUserTasksQuery, useLazyGetTaskDetailsQuery } = apiSlice
+export const { useLoginMutation, useRegisterMutation, useLazyListUsersQuery, useLazyListUserProjectsQuery, useLazyListUserTasksQuery, useLazyGetTaskDetailsQuery, useCreateProjectMutation, useUpdateTaskMutation } = apiSlice

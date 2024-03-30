@@ -12,7 +12,7 @@ import ProtectedRoutes from './outlets/ProtectedRoutes';
 const App = () => {
   return (
     <>
-      <ToastContainer />
+      <ToastContainer hideProgressBar autoClose={1500} position='top-center' closeOnClick />
       <Navbar />
       <Routes>
         <Route element={<ProtectedRoutes />}>

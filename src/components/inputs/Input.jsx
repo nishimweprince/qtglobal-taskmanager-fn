@@ -69,7 +69,7 @@ const Input = forwardRef(
 
     return (
       <label className={`flex flex-col items-start gap-[6px] w-full ${labelClassName}`}>
-      <p className={`${label ? 'flex' : 'null'} flex items-center gap-[3px] font-medium text-[15px]`}>
+      <p className={`${label ? 'flex' : 'null'} flex items-center gap-[3px] font-normal text-[15px]`}>
         {label}
         {' '}
         <span className={required ? 'text-red-600' : 'hidden'}>*</span>

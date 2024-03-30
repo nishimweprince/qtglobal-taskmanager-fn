@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass, faFilePdf } from "@fortawesome/free-solid-svg-icons";
+import { faMagnifyingGlass, faFilePdf, faFileExcel } from "@fortawesome/free-solid-svg-icons";
 import {
   useGlobalFilter,
   useTable,
@@ -13,7 +13,8 @@ import {
 import "regenerator-runtime/runtime";
 import Button from "../inputs/Button";
 import Input from "../inputs/Input";
-import printPDF from "./Export";
+import { exportToExcel, printPDF } from "./Export";
+import { capitalizeString } from "../../helpers/words";
 
 const Table = ({ columns, data, pagination = true }) => {
   const tableColumns = useMemo(
@@ -29,6 +30,7 @@ const Table = ({ columns, data, pagination = true }) => {
 
   const [showExportPopup, setShowExportPopup] = useState(false);
   const [reportName, setReportName] = useState("");
+  const [exportType, setExportType] = useState("pdf");
 
   const openExportPopup = () => {
     setShowExportPopup(true);
@@ -96,12 +98,27 @@ const Table = ({ columns, data, pagination = true }) => {
           </span>
         </section>
         <section className="w-full mx-auto h-fit flex flex-col items-start flex-wrap gap-4 max-md:justify-center">
-          <span>
+          <span className="flex items-center gap-4">
             <Button
               className="!border-[1px]"
               value={
-                <span className="flex items-center gap-2">
-                  Export Report <FontAwesomeIcon icon={faFilePdf} />
+                <span className="flex items-center gap-2" onClick={(e) => {
+                  e.preventDefault();
+                  setExportType('pdf');
+                }}>
+                  Export PDF <FontAwesomeIcon icon={faFilePdf} />
+                </span>
+              }
+              onClick={openExportPopup}
+            />
+            <Button
+              className="!border-[1px]"
+              value={
+                <span className="flex items-center gap-2" onClick={(e) => {
+                  e.preventDefault();
+                  setExportType('excel');
+                }}>
+                  Export Excel <FontAwesomeIcon icon={faFileExcel} />
                 </span>
               }
               onClick={openExportPopup}
@@ -112,7 +129,7 @@ const Table = ({ columns, data, pagination = true }) => {
         {showExportPopup && (
           <section className="fixed inset-0 flex items-center justify-center z-10 bg-gray-800 bg-opacity-60">
             <form className="bg-white p-4 rounded-lg shadow-lg min-w-[30rem] flex flex-col gap-4 items-center">
-              <h2 className="text-xl font-semibold uppercase">Print PDF</h2>
+              <h2 className="text-xl font-semibold uppercase">Print {capitalizeString(exportType)}</h2>
               <Input
                 type="text"
                 onChange={(e) => setReportName(e.target.value)}
@@ -122,11 +139,11 @@ const Table = ({ columns, data, pagination = true }) => {
               <span className="flex gap-3">
                 <Button
                   value={
-                    <span className="flex items-center gap-2">Export PDF</span>
+                    <span className="flex items-center gap-2">Export {capitalizeString(exportType)}</span>
                   }
                   onClick={(e) => {
                     e.preventDefault();
-                    printPDF({ TableInstance, reportName, columns });
+                    exportType === 'pdf' ? printPDF({ TableInstance, reportName, columns }) : exportToExcel({ TableInstance, reportName, columns });
                   }}
                 />
                 <Button

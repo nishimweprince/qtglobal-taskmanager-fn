@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { setToken, setUser } from '../redux/features/accountSlice';
 import { toastOptions } from '../constants/Toastify';
+import validateInputs from '../helpers/validations';
 
 const Login = () => {
   const {
@@ -26,6 +27,7 @@ const Login = () => {
       isLoading: isLoginLoading,
       isSuccess: isLoginSuccess,
       isError: isLoginError,
+      error: loginError,
       data: loginData,
     },
   ] = useLoginMutation();
@@ -46,9 +48,13 @@ const Login = () => {
         navigate('/');
       }, 1000);
     } else if (isLoginError) {
-      toast.error('Login failed. Please try again', toastOptions);
+      if (loginError?.status === 500) {
+        toast.error('Server error. Please try again later', toastOptions);
+      } else {
+        toast.error(loginError?.data?.message, toastOptions);
     }
-  }, [isLoginSuccess, isLoginError, loginData, dispatch, navigate]);
+  }
+  }, [isLoginSuccess, isLoginError, loginData, dispatch, navigate, loginError?.status, loginError?.data?.message]);
 
   return (
     <main className="w-full h-screen mx-auto p-8 bg-primary flex items-center justify-center">
@@ -68,7 +74,9 @@ const Login = () => {
           <span className="w-full flex flex-col gap-4">
             <Controller
               name="email"
-              rules={{ required: 'Email is required' }}
+              rules={{ required: 'Email is required', validate: (value) => {
+                return validateInputs(value, 'email') || 'Invalid email address';
+              } }}
               control={control}
               render={({ field }) => {
                 return (
@@ -78,7 +86,7 @@ const Login = () => {
                     </p>
                     <Input {...field} />
                     {errors.email && (
-                      <span className="text-red-600">
+                      <span className="text-red-600 text-[13px]">
                         {errors.email.message}
                       </span>
                     )}
@@ -98,7 +106,7 @@ const Login = () => {
                     </p>
                     <Input type="password" {...field} />
                     {errors.password && (
-                      <span className="text-red-600">
+                      <span className="text-red-600 text-[13px]">
                         {errors.password.message}
                       </span>
                     )}

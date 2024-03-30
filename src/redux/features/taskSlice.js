@@ -8,7 +8,8 @@ export const taskSlice = createSlice({
         selectedAssignees: [],
         selectedProjects: [],
         listProjectsModal: false,
-        listUsersModal: false
+        listUsersModal: false,
+        updateTaskStatusModal: false,
     },
     reducers: {
         setSelectedAssignees: (state, action) => {
@@ -35,9 +36,12 @@ export const taskSlice = createSlice({
         removeSelectedProject: (state, action) => {
             state.selectedProjects = action.payload
         },
+        setUpdateTaskStatusModal: (state, action) => {
+            state.updateTaskStatusModal = action.payload
+        }
     }
 });
 
 export default taskSlice.reducer;
 
-export const { setSelectedAssignees, setSelectedProjects, setTask, setTasksList, toggleListProjectsModal, toggleListUsersModal, removeSelectedAssignee, removeSelectedProject } = taskSlice.actions;
+export const { setSelectedAssignees, setSelectedProjects, setTask, setTasksList, toggleListProjectsModal, toggleListUsersModal, removeSelectedAssignee, removeSelectedProject, setUpdateTaskStatusModal } = taskSlice.actions;

@@ -25,6 +25,8 @@ import axios from 'axios';
 import { LOCAL_API_URL } from '../constants';
 import { toast } from 'react-toastify';
 import { toastOptions } from '../constants/Toastify';
+import moment from 'moment';
+import { useNavigate } from 'react-router-dom';
 
 const CreateTask = () => {
   const {
@@ -32,9 +34,14 @@ const CreateTask = () => {
     control,
     formState: { errors },
     setValue,
+    watch
   } = useForm();
 
+  // STATE VARIABLES
   const dispatch = useDispatch();
+
+  // NAVIGATE
+  const navigate = useNavigate();
 
   const [attachmentFiles, setAttachmentFiles] = useState([]);
 
@@ -50,31 +57,32 @@ const CreateTask = () => {
     try {
       const formData = new FormData();
 
-    formData.append('title', data?.title);
-    formData.append('start_date', data?.start_date);
-    formData.append('end_date', data?.end_date);
-    formData.append('description', data?.description);
-    formData.append('priority', data?.priority || 'low');
-    selectedAssignees.forEach((assignee, index) => {
-      formData.append(`task_assignees[${index}]`, assignee?.user_id);
-    });
-    
-    selectedProjects.forEach((project, index) => {
-      formData.append(`task_projects[${index}]`, project?.project_id);
-    });
-    attachmentFiles?.forEach((file) => formData.append('files', file));
+      formData.append('title', data?.title);
+      formData.append('start_date', data?.start_date);
+      formData.append('end_date', data?.end_date);
+      formData.append('description', data?.description);
+      formData.append('priority', data?.priority || 'low');
+      selectedAssignees.forEach((assignee, index) => {
+        formData.append(`task_assignees[${index}]`, assignee?.user_id);
+      });
 
-    setIsLoading(true)
-    const response = await axios.post(`${LOCAL_API_URL}/tasks`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${token}`,
-      }
-    });
+      selectedProjects.forEach((project, index) => {
+        formData.append(`task_projects[${index}]`, project?.project_id);
+      });
+      attachmentFiles?.forEach((file) => formData.append('files', file));
 
-    setIsLoading(false)
-    toast.success('Task created successfully', toastOptions)
-    dispatch(setTask(response?.data))
+      setIsLoading(true)
+      const response = await axios.post(`${LOCAL_API_URL}/tasks`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        }
+      });
+
+      setIsLoading(false)
+      toast.success('Task created successfully', toastOptions)
+      dispatch(setTask(response?.data))
+      navigate('/tasks')
     } catch (error) {
       setIsLoading(false)
       toast.error('Could not create task. Please check your information and try again.', toastOptions)
@@ -149,7 +157,13 @@ const CreateTask = () => {
           />
           <Controller
             name="end_date"
-            rules={{ required: 'End date is required' }}
+            rules={{
+              required: 'End date is required', validate: (value) => {
+                if (watch('start_date') && moment(value).format() < moment(watch('start_date')).format()) {
+                  return 'End date cannot be less than start date'
+                }
+              }
+            }}
             control={control}
             render={({ field }) => {
               return (
@@ -257,11 +271,7 @@ const CreateTask = () => {
           rules={{
             required: 'Description is required',
             validate: (value) => {
-              if (value.length === 0) {
-                return 'Description is required';
-              } else if (value.length > 300) {
-                return 'Description cannot exceed 300 characters';
-              }
+              return value?.trim()?.length < 50 || 'Description cannot exceed 50 characters';
             },
           }}
           control={control}
@@ -269,9 +279,8 @@ const CreateTask = () => {
             return (
               <label className="flex flex-col gap-2 w-full">
                 <TextArea
-                  className={`${
-                    errors?.description ? '!border-red-600' : 'ring-gray-300'
-                  }`}
+                  className={`${errors?.description ? '!border-red-600' : 'ring-gray-300'
+                    }`}
                   label="Description"
                   placeholder="Add more details about this task"
                   {...field}
@@ -288,7 +297,7 @@ const CreateTask = () => {
         <span className="flex flex-col gap-2">
           <h4 className="font-medium text-[17px]">Priority</h4>
           <fieldset className="flex items-center gap-6">
-            {['low', 'medium', 'high']?.map((priority, index) => {
+            {['low', 'normal', 'high']?.map((priority, index) => {
               return (
                 <Controller
                   name="priority"
@@ -347,7 +356,7 @@ const CreateTask = () => {
                     />
                     <FontAwesomeIcon icon={faPaperclip} /> Attach
                     <span className='mx-4'>
-                    <FontAwesomeIcon icon={faAdd} />
+                      <FontAwesomeIcon icon={faAdd} />
                     </span>
                   </label>
                 );

@@ -3,6 +3,8 @@ import { apiSlice } from './api/apiSlice'
 import accountSlice from './features/accountSlice'
 import navbarSlice from './features/navbarSlice'
 import taskSlice from './features/taskSlice'
+import assigneeSlice from './features/assigneeSlice'
+import projectSlice from './features/projectSlice'
 
 const store = configureStore({
   reducer: {
@@ -10,6 +12,8 @@ const store = configureStore({
     account: accountSlice,
     navbar: navbarSlice,
     task: taskSlice,
+    assignee: assigneeSlice,
+    project: projectSlice
   },
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware().concat(apiSlice.middleware)

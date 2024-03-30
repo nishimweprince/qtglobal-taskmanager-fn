@@ -9,6 +9,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAdd } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
 import { toastOptions } from '../../constants/Toastify';
+import { toggleCreateProjectModal } from '../../redux/features/projectSlice';
+import CreateProject from './CreateProject';
 
 const ListProjectsModal = ({ isOpen = false }) => {
   const dispatch = useDispatch();
@@ -43,9 +45,16 @@ const ListProjectsModal = ({ isOpen = false }) => {
           <Loading />
         ) : (
           <section className="h-full flex flex-col items-center w-full gap-6 my-4">
-            <h1 className="text-primary font-medium uppercase">
-              Select projects to associate with this task
-            </h1>
+            <menu className='flex items-center w-full gap-3 justify-between'>
+              <h1 className="text-primary font-medium uppercase">
+                Select projects to associate with this task
+              </h1>
+              <Button value='Add project' primary onClick={(e) => {
+                e.preventDefault();
+                dispatch(toggleListProjectsModal(false));
+                dispatch(toggleCreateProjectModal(true));
+              }} />
+            </menu>
             <menu className="flex flex-col gap-2 w-full">
               {listUserProjectsData?.data?.rows?.map((project, index) => {
                 return (
@@ -100,6 +109,7 @@ const ListProjectsModal = ({ isOpen = false }) => {
           />
         </span>
       </section>
+      <CreateProject />
     </main>
   );
 };

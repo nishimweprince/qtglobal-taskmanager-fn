@@ -3,7 +3,7 @@ import { useLazyGetTaskDetailsQuery } from "../redux/api/apiSlice";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { toastOptions } from "../constants/Toastify";
-import { capitalizeWords } from "../helpers/Words";
+import { capitalizeString } from "../helpers/Words";
 import moment from "moment";
 import Button from "../components/inputs/Button";
 import Loading from "../components/Loading";
@@ -42,7 +42,7 @@ const TaskDetails = () => {
               Title: {task?.title}
             </h1>
             <p>Description: {task?.description}</p>
-            <p>Priority: {task?.priority && capitalizeWords(task?.priority)}</p>
+            <p>Priority: {task?.priority && capitalizeString(task?.priority)}</p>
             <p>Added by: {task?.user?.name}</p>
             <p>date Added: {moment(task?.createAt).format('YYYY-MM-DD')}</p>
           </span>
