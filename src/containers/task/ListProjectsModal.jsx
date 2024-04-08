@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAdd } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
-import { toastOptions } from '../../constants/Toastify';
+import { toastOptions } from '../../constants/toastify';
 import { toggleCreateProjectModal } from '../../redux/features/projectSlice';
 import CreateProject from './CreateProject';
 

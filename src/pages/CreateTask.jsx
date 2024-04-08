@@ -24,7 +24,7 @@ import {
 import axios from 'axios';
 import { LOCAL_API_URL } from '../constants';
 import { toast } from 'react-toastify';
-import { toastOptions } from '../constants/Toastify';
+import { toastOptions } from '../constants/toastify';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 

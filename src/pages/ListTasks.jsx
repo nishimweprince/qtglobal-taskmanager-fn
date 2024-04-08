@@ -7,7 +7,7 @@ import Table from "../components/table/Table";
 import moment from "moment";
 import { capitalizeString } from "../helpers/words";
 import { toast } from "react-toastify";
-import { toastOptions } from "../constants/Toastify";
+import { toastOptions } from "../constants/toastify";
 import Loading from "../components/Loading";
 import { useDispatch, useSelector } from "react-redux";
 import UpdateTaskStatus from "../containers/task/UpdateTaskStatus";

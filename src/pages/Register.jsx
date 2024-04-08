@@ -8,7 +8,7 @@ import Loading from '../components/Loading';
 import { useDispatch } from 'react-redux';
 import { setToken, setUser } from '../redux/features/accountSlice';
 import { useNavigate } from 'react-router-dom';
-import { toastOptions } from '../constants/Toastify'
+import { toastOptions } from '../constants/toastify'
 
 const Register = () => {
   const {

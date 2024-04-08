@@ -6,7 +6,7 @@ import { useLazyListUsersQuery } from '../../redux/api/apiSlice';
 import { useEffect } from 'react';
 import Loading from '../../components/Loading';
 import { toast } from 'react-toastify';
-import { toastOptions } from '../../constants/Toastify';
+import { toastOptions } from '../../constants/toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAdd } from '@fortawesome/free-solid-svg-icons';
 import { toggleCreateAssigneeModal } from '../../redux/features/assigneeSlice';

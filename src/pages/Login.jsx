@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { setToken, setUser } from '../redux/features/accountSlice';
-import { toastOptions } from '../constants/Toastify';
+import { toastOptions } from '../constants/toastify';
 import validateInputs from '../helpers/validations';
 
 const Login = () => {
