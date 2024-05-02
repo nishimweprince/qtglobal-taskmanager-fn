@@ -4,7 +4,7 @@ import { API_URL, LOCAL_API_URL } from '../../constants'
 export const apiSlice = createApi({
     reducerPath: 'api',
     baseQuery: fetchBaseQuery({
-        baseUrl: API_URL || LOCAL_API_URL,
+        baseUrl: "https://qtglobal-taskmanager-bn.onrender.com/api" || API_URL || LOCAL_API_URL,
         prepareHeaders: (headers) => {
           const token = localStorage.getItem('token');
           if (token) {
