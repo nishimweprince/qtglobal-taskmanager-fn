@@ -5,6 +5,8 @@ export const accountSlice = createSlice({
     initialState: {
         user: JSON.parse(localStorage.getItem("user")) || null,
         token: localStorage.getItem("token") || null,
+        deleteUserModal: false,
+        selectedUser: null,
     },
     reducers: {
         setUser: (state, action) => {
@@ -14,10 +16,16 @@ export const accountSlice = createSlice({
         setToken: (state, action) => {
             state.token = action.payload;
             localStorage.setItem("token", action.payload);
+        },
+        setDeleteUserModal: (state, action) => {
+            state.deleteUserModal = action.payload;
+        },
+        setSelectedUser: (state, action) => {
+            state.selectedUser = action.payload;
         }
     },
 })
 
 export default accountSlice.reducer;
 
-export const { setUser, setToken } = accountSlice.actions;
+export const { setUser, setToken, setDeleteUserModal, setSelectedUser } = accountSlice.actions;

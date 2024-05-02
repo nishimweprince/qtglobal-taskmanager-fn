@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import Button from '../../components/inputs/Button';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setSelectedAssignees, toggleListUsersModal } from '../../redux/features/taskSlice';
 import { useLazyListUsersQuery } from '../../redux/api/apiSlice';
 import { useEffect } from 'react';
@@ -8,12 +8,18 @@ import Loading from '../../components/Loading';
 import { toast } from 'react-toastify';
 import { toastOptions } from '../../constants/toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAdd } from '@fortawesome/free-solid-svg-icons';
+import { faAdd, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { toggleCreateAssigneeModal } from '../../redux/features/assigneeSlice';
 import CreateAssignee from '../task/CreateAssignee'
+import { setDeleteUserModal, setSelectedUser } from '../../redux/features/accountSlice';
+import DeleteUser from './DeleteUser';
+import Modal from '../../components/modals/Modal';
 
 const ListUsersModal = ({ isOpen = false }) => {
+
+  // STATE VARIABLES
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.account);
 
   const [
     listUsers,
@@ -37,17 +43,11 @@ const ListUsersModal = ({ isOpen = false }) => {
   }, [isListUsersSuccess, isListUsersError, listUsersData, listUsersError]);
 
   return (
-    <main
-      className={`${isOpen ? 'flex overflow-y-hidden' : 'hidden'
-        } absolute items-center justify-center z-[10000] w-full h-screen bg-slate-500 bg-opacity-30 top-0 right-0 bottom-0 left-0`}
-    >
-      <section
-        className={`w-[45%] relative h-fit px-6 py-4 flex flex-col gap-4 items-start justify-start bg-white rounded-md shadow-md`}
-      >
+    <Modal isOpen={isOpen} onClose={() => dispatch(toggleListUsersModal(false))}>
         {isListUsersLoading ? (
           <Loading />
         ) : (
-          <section className="h-full flex flex-col items-center w-full gap-6 my-4">
+          <section className="h-full flex flex-col items-center w-full gap-6 mt-8">
             <menu className='flex items-center gap-3 justify-between w-full'>
               <h1 className="text-primary font-medium uppercase">
                 Select users to assign on this task
@@ -59,7 +59,7 @@ const ListUsersModal = ({ isOpen = false }) => {
               }} />
             </menu>
             <menu className="flex flex-col gap-2 w-full">
-              {listUsersData?.data?.rows?.map((user, index) => {
+              {listUsersData?.data?.rows?.filter(u => u?.id !== user?.id)?.map((user, index) => {
                 return (
                   <label
                     key={index}
@@ -76,6 +76,7 @@ const ListUsersModal = ({ isOpen = false }) => {
                       background={false}
                       className="hover:!no-underline !p-0 w-full"
                     />
+                    <menu className='flex items-center gap-2'>
                     <Button
                       value={<FontAwesomeIcon icon={faAdd} />}
                       background={false}
@@ -88,8 +89,15 @@ const ListUsersModal = ({ isOpen = false }) => {
                             user_email: user?.email,
                           })
                         );
-                      }}
-                    />
+                        }}
+                      />
+                      <FontAwesomeIcon icon={faTrash} className="bg-red-600 text-white p-2 text-[12px] rounded-full cursor-pointer transition-all duration-200 hover:scale-[1.02]" onClick={(e) => {
+                        e.preventDefault();
+                        dispatch(setSelectedUser(user));
+                        dispatch(toggleListUsersModal(false));
+                        dispatch(setDeleteUserModal(true));
+                      }} />
+                    </menu>
                   </label>
                 );
               })}
@@ -106,9 +114,9 @@ const ListUsersModal = ({ isOpen = false }) => {
             }}
           />
         </span>
-      </section>
       <CreateAssignee />
-    </main>
+      <DeleteUser />
+    </Modal>
   );
 };
 

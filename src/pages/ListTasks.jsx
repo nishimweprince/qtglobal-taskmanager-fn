@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useLazyListUserTasksQuery } from "../redux/api/apiSlice";
 import Button from "../components/inputs/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAdd, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { faAdd, faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Table from "../components/table/Table";
 import moment from "moment";
 import { capitalizeString } from "../helpers/words";
@@ -11,7 +11,8 @@ import { toastOptions } from "../constants/toastify";
 import Loading from "../components/Loading";
 import { useDispatch, useSelector } from "react-redux";
 import UpdateTaskStatus from "../containers/task/UpdateTaskStatus";
-import { setTask, setUpdateTaskStatusModal } from "../redux/features/taskSlice";
+import { setDeleteTaskModal, setTask, setUpdateTaskStatusModal } from "../redux/features/taskSlice";
+import DeleteTask from "./DeleteTask";
 
 const ListTasks = () => {
 
@@ -115,6 +116,11 @@ const ListTasks = () => {
       Cell: ({ row }) => (
         <article className="flex w-full items-center gap-[5px]">
           <Button value='Details' primary route={`/tasks/${row?.original?.id}`} />
+          <FontAwesomeIcon onClick={(e) => {
+            e.preventDefault();
+            dispatch(setTask(row?.original));
+            dispatch(setDeleteTaskModal(true));
+          }} icon={faTrash} className="bg-red-600 text-white p-2 rounded-full cursor-pointer transition-all duration-200 hover:scale-[1.02]" />
         </article>
       ),
     },
@@ -172,6 +178,7 @@ const ListTasks = () => {
         )}
       </section>
       <UpdateTaskStatus />
+      <DeleteTask />
     </main>
   );
 }

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-const Loader = ({ color = 'primary', size = 6 }) => {
+const Loader = ({ color = 'primary', size = 5 }) => {
     return (
         <figure role="status">
             <svg

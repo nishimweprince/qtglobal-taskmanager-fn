@@ -61,8 +61,20 @@ export const apiSlice = createApi({
                     body: { status, title, priority, description }
                 })
             }),
+            deleteTask: builder.mutation({
+                query: ({ id }) => ({
+                    url: `/tasks/${id}`,
+                    method: 'DELETE'
+                })
+            }),
+            deleteUser: builder.mutation({
+                query: ({ id }) => ({
+                    url: `/users/${id}`,
+                    method: 'DELETE'
+                })
+            })
         }
     }
 })
 
-export const { useLoginMutation, useRegisterMutation, useLazyListUsersQuery, useLazyListUserProjectsQuery, useLazyListUserTasksQuery, useLazyGetTaskDetailsQuery, useCreateProjectMutation, useUpdateTaskMutation } = apiSlice
+export const { useLoginMutation, useRegisterMutation, useLazyListUsersQuery, useLazyListUserProjectsQuery, useLazyListUserTasksQuery, useLazyGetTaskDetailsQuery, useCreateProjectMutation, useUpdateTaskMutation, useDeleteTaskMutation, useDeleteUserMutation } = apiSlice
