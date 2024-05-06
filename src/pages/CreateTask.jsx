@@ -22,7 +22,6 @@ import {
   toggleListUsersModal,
 } from '../redux/features/taskSlice';
 import axios from 'axios';
-import { LOCAL_API_URL } from '../constants';
 import { toast } from 'react-toastify';
 import { toastOptions } from '../constants/toastify';
 import moment from 'moment';
@@ -72,7 +71,7 @@ const CreateTask = () => {
       attachmentFiles?.forEach((file) => formData.append('files', file));
 
       setIsLoading(true)
-      const response = await axios.post(`${LOCAL_API_URL}/tasks`, formData, {
+      const response = await axios.post(`https://qtglobal-taskmanager-bn.onrender.com/api/tasks`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,
