@@ -78,6 +78,19 @@ const ListTasks = () => {
       }
     },
     {
+      Header: 'Assignees',
+      accessor: 'assignees',
+      Cell: ({ row }) => (
+        <menu className="flex flex-col items-start gap-[3px] w-full">
+          {row?.original?.assignees?.map((assignee, index) => {
+            return (
+              <p key={index} className="text-[12px] p-1 rounded-md shadow-xs bg-slate-100 w-full text-center transition-all hover:scale-[1.03] duration-200 cursor-pointer">{assignee?.name}</p>
+            )
+          })}
+        </menu>
+      ),
+    },
+    {
       id: 'draft',
       name: 'draft',
       Header: 'Draft',
@@ -122,7 +135,7 @@ const ListTasks = () => {
           }} icon={faTrash} className="bg-red-600 text-white p-2 rounded-full cursor-pointer transition-all duration-200 hover:scale-[1.02]" />
         </article>
       ),
-    },
+    }
   ];
 
 
@@ -161,6 +174,7 @@ const ListTasks = () => {
               ?.sort((a, b) => moment(b?.createdAt).format() - moment(a?.createdAt).format())
               ?.map((task, index) => {
                 return {
+                  ...task,
                   no: index + 1,
                   id: task?.id,
                   title: task?.title,
