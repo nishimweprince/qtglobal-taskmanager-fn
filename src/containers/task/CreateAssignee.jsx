@@ -8,7 +8,6 @@ import Button from '../../components/inputs/Button';
 import { useRegisterMutation } from '../../redux/api/apiSlice';
 import { useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
-import Loader from '../../components/inputs/Loader';
 import { toggleListUsersModal } from '../../redux/features/taskSlice';
 
 const CreateAssignee = () => {
@@ -106,10 +105,20 @@ const CreateAssignee = () => {
                         </label>
                     )
                 }} />
-                <Controller name='phone' control={control} render={({ field }) => {
+                <Controller name='phone' control={control} rules={{
+                    validate: (value) => {
+                        if (!value) return true;
+                        return validateInputs(value, 'tel') || 'Invalid phone number'
+                    }
+                }} render={({ field }) => {
                     return (
                         <label className='flex flex-col gap-1'>
                             <Input ref={inputRefs?.phone} label='Phone number' placeholder='Enter user phone number' {...field} />
+                            {errors?.phone && (
+                                <p className='text-red-600 text-[13px]'>
+                                    {'Phone numbers must be of the format: 07(2,3,8,9)xxxxxxx'}
+                                </p>
+                            )}
                         </label>
                     )
                 }} />
@@ -118,7 +127,7 @@ const CreateAssignee = () => {
                         e.preventDefault();
                         dispatch(toggleCreateAssigneeModal(false))
                     }} />
-                    <Button value={registerIsLoading ? <Loader /> : 'Submit'} submit primary />
+                    <Button value={registerIsLoading ? <p>Loading...</p> : 'Submit'} submit primary />
                 </menu>
             </form>
         </Modal>

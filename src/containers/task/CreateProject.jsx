@@ -86,7 +86,7 @@ const CreateProject = () => {
                         e.preventDefault();
                         dispatch(toggleCreateProjectModal(false))
                     }} />
-                    <Button value={isCreateProjectLoading ? <Loader /> : 'Submit'} submit primary />
+                    <Button value={isCreateProjectLoading ? <p>Loading...</p> : 'Submit'} submit primary />
                 </menu>
             </form>
         </Modal>

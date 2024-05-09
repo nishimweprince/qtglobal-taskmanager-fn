@@ -5,7 +5,7 @@ const Loading = ({ color = 'primary', size = 6 }) => {
     <section className="flex items-center justify-center">
       <svg
         aria-hidden="true"
-        className={`w-${size} h-${size} mr-2 text-${color} animate-spin fill-white`}
+        className={`w-${size} h-${size} mr-2 text-${color} animate-spin fill-${color}`}
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

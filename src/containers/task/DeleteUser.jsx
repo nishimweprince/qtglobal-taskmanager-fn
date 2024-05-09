@@ -51,7 +51,7 @@ const DeleteUser = () => {
                             e.preventDefault();
                             dispatch(setDeleteUserModal(false))
                         }} />
-                        <Button value={deleteUserIsLoading ? <Loader /> : 'Delete'} className='!bg-red-600 hover:!bg-red-700 !text-white !border-none' onClick={(e) => {
+                        <Button value={deleteUserIsLoading ? <p>Loading...</p> : 'Delete'} className='!bg-red-600 hover:!bg-red-700 !text-white !border-none' onClick={(e) => {
                             e.preventDefault();
                             deleteUser({ id: selectedUser?.id })
                         }} />

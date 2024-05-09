@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setSelectedAssignees, toggleListUsersModal } from '../../redux/features/taskSlice';
 import { useLazyListUsersQuery } from '../../redux/api/apiSlice';
 import { useEffect } from 'react';
-import Loading from '../../components/Loading';
 import { toast } from 'react-toastify';
 import { toastOptions } from '../../constants/toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -45,7 +44,9 @@ const ListUsersModal = ({ isOpen = false }) => {
   return (
     <Modal isOpen={isOpen} onClose={() => dispatch(toggleListUsersModal(false))}>
         {isListUsersLoading ? (
-          <Loading />
+          <span className='w-full flex items-center justify-center h-[10vh]'>
+            <p>Loading...</p>
+          </span>
         ) : (
           <section className="h-full flex flex-col items-center w-full gap-6 mt-8">
             <menu className='flex items-center gap-3 justify-between w-full'>

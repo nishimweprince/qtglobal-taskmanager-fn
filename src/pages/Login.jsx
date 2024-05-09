@@ -127,7 +127,7 @@ const Login = () => {
                 return (
                   <Button
                     name="submit"
-                    value={isLoginLoading ? <Loading /> : 'Submit'}
+                    value={isLoginLoading ? <p>Loading...</p> : 'Submit'}
                     submit
                     primary
                     className="w-full"

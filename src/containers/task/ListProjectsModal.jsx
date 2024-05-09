@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import Button from '../../components/inputs/Button';
 import { setSelectedProjects, toggleListProjectsModal } from '../../redux/features/taskSlice';
-import Loading from '../../components/Loading';
 import { useLazyListUserProjectsQuery } from '../../redux/api/apiSlice';
 import { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -42,7 +41,7 @@ const ListProjectsModal = ({ isOpen = false }) => {
         className={`w-[45%] relative h-fit px-6 py-4 flex flex-col gap-4 items-start justify-start bg-white rounded-md shadow-md`}
       >
         {isListUserProjectsLoading ? (
-          <Loading />
+          <p>Loading...</p>
         ) : (
           <section className="h-full flex flex-col items-center w-full gap-6 my-4">
             <menu className='flex items-center w-full gap-3 justify-between'>

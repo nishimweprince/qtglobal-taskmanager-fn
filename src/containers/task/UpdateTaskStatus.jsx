@@ -78,7 +78,7 @@ const UpdateTaskStatus = () => {
                         e.preventDefault();
                         dispatch(setUpdateTaskStatusModal(false))
                     }} />
-                    <Button value={isUpdateTaskLoading ? <Loader /> : 'Submit'} submit primary />
+                    <Button value={isUpdateTaskLoading ? <p>Loading...</p> : 'Submit'} submit primary />
                 </menu>
             </form>
         </Modal>

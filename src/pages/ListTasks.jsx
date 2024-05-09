@@ -8,7 +8,6 @@ import moment from "moment";
 import { capitalizeString } from "../helpers/words";
 import { toast } from "react-toastify";
 import { toastOptions } from "../constants/toastify";
-import Loading from "../components/Loading";
 import { useDispatch, useSelector } from "react-redux";
 import UpdateTaskStatus from "../containers/task/UpdateTaskStatus";
 import { setDeleteTaskModal, setTask, setUpdateTaskStatusModal } from "../redux/features/taskSlice";
@@ -132,7 +131,7 @@ const ListTasks = () => {
     <main className="flex w-[90%] mx-auto flex-col gap-6 p-4">
       <section className="flex items-center justify-between">
         <h1 className="text-xl font-semibold text-primary uppercase">
-          Available Tasks for {user?.name}
+          Available Tasks
         </h1>
         <Button
           value={
@@ -147,7 +146,7 @@ const ListTasks = () => {
       </section>
       {listUserTasksIsLoading && (
         <span className="min-h-[60vh] flex items-center justify-center">
-          <Loading />
+          <p>Loading...</p>
         </span>
       )}
       <section
@@ -159,7 +158,7 @@ const ListTasks = () => {
             columns={columns}
             data={listUserTasksData?.data?.rows
               ?.slice()
-              ?.sort((a, b) => b?.createdAt - a?.createdAt)
+              ?.sort((a, b) => moment(b?.createdAt).format() - moment(a?.createdAt).format())
               ?.map((task, index) => {
                 return {
                   no: index + 1,

@@ -60,7 +60,7 @@ const CreateTask = () => {
       formData.append('start_date', data?.start_date);
       formData.append('end_date', data?.end_date);
       formData.append('description', data?.description);
-      formData.append('priority', data?.priority || 'low');
+      formData.append('priority', data?.priority);
       selectedAssignees.forEach((assignee, index) => {
         formData.append(`task_assignees[${index}]`, assignee?.user_id);
       });
@@ -301,7 +301,7 @@ const CreateTask = () => {
                 <Controller
                   name="priority"
                   key={index}
-                  defaultValue="low"
+                  defaultValue="high"
                   control={control}
                   render={({ field }) => {
                     return (

@@ -2,7 +2,7 @@ import { Controller, useForm } from 'react-hook-form';
 import Button from '../components/inputs/Button';
 import Input from '../components/inputs/Input';
 import { useRegisterMutation } from '../redux/api/apiSlice';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import Loading from '../components/Loading';
 import { useDispatch } from 'react-redux';
@@ -21,12 +21,6 @@ const Register = () => {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
-
-  const [registerErrors, setRegisterErrors] = useState({
-    conflict: null,
-    badRequest: null,
-    serverError: null,
-  });
 
   const [
     register,
@@ -59,23 +53,11 @@ const Register = () => {
       }, 1000);
     }
     if (isRegisterError) {
-      if (registerError?.status == 409) {
-        setRegisterErrors({
-          conflict: registerError?.data?.message,
-          badRequest: null,
-        });
+      if (registerError?.status == 500) {
+        toast.error('Could not create account, please try again later');
       }
-      if (registerError?.status == 400) {
-        setRegisterErrors({
-          badRequest: registerError?.data?.message,
-          conflict: null,
-        });
-      } else {
-        setRegisterErrors({
-          badRequest: null,
-          conflict: null,
-        });
-        toast.error('Could not create account, please try again later', toastOptions);
+      else {
+        toast.error(registerError?.data?.message);
       }
     }
   }, [registerData, registerError, isRegisterSuccess, isRegisterError, isRegisterLoading, dispatch, navigate]);
@@ -211,21 +193,6 @@ const Register = () => {
               />
             </span>
           </section>
-          <span
-            className={`${
-              isRegisterError &&
-              (registerErrors?.conflict || registerErrors?.badRequest)
-                ? 'flex'
-                : 'hidden'
-            } flex-col gap-2 items-center w-full text-red-600`}
-          >
-            <p className={registerErrors?.conflict ? 'flex' : 'hidden'}>
-              {registerErrors?.conflict}
-            </p>
-            <p className={registerErrors?.badRequest ? 'flex' : 'hidden'}>
-              {registerErrors?.badRequest}
-            </p>
-          </span>
           <span className="flex flex-col gap-2 items-center w-full">
             <Controller
               name="submit"
@@ -234,7 +201,7 @@ const Register = () => {
                 return (
                   <Button
                     name="submit"
-                    value={isRegisterLoading ? <Loading /> : 'Submit'}
+                    value={isRegisterLoading ? <p>Loading...</p> : 'Submit'}
                     submit
                     primary
                     className="w-full"

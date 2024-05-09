@@ -52,7 +52,7 @@ const DeleteTask = () => {
               e.preventDefault();
               dispatch(setDeleteTaskModal(false))
             }} />
-            <Button value={deleteTaskIsLoading ? <Loader /> : 'Delete'} className='!bg-red-600 hover:!bg-red-700 !text-white !border-none' onClick={(e) => {
+            <Button value={deleteTaskIsLoading ? <p>Loading...</p> : 'Delete'} className='!bg-red-600 hover:!bg-red-700 !text-white !border-none' onClick={(e) => {
               e.preventDefault();
               deleteTask({ id: task?.id })
             }} />

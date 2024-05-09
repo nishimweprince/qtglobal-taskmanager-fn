@@ -108,7 +108,7 @@ const TaskDetails = () => {
       )}
       {isLoading && (
         <span className="flex items-center justify-center min-h-[60vh] w-full">
-            <Loading />
+            <p>Loading...</p>
         </span>
       )}
     </main>

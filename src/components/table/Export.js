@@ -3,6 +3,7 @@ import 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import moment from 'moment';
 import logo from '../../assets/qtglobal_logo.png';
+import { capitalizeString } from '../../helpers/words';
 
 export const convertBlobToBase64 = (blob) => {
   return new Promise((resolve) => {
@@ -47,32 +48,32 @@ export const printPDF = async ({ TableInstance, reportName, columns = [] }) => {
       };
     });
 
-  doc.autoTable({
-   startY: 50,
-   columns: columns.filter((column) => column.accessor !== 'actions').map((column) => column.Header.toUpperCase()),
-   body: exportData.map((row, index) => {
-    const rowData = columns.map((header) => {
-      return row[header?.accessor || 'NO'];
-    })
-    return {index, ...rowData};
-   }),
-   theme: 'grid',
-   headStyles: {
-    fillColor: [4, 65, 99],
-    textColor: 255,
-    fontSize: 10,
-    halign: 'start',
-    cellPadding: 3,
-  },
-  styles: {
-    fontSize: 10, 
-    textColor: 0,
-    cellPadding: 3,
-  },
-  });
+    doc.autoTable({
+      startY: 50,
+      columns: columns.filter((column) => column.accessorr !== 'actions').map((column) => column.Header.toUpperCase()),
+      body: exportData.map((row, index) => {
+        const rowData = columns.map((header) => {
+          return row[header?.accessorr || 'NO'];
+        })
+        return { index, ...rowData };
+      }),
+      theme: 'grid',
+      headStyles: {
+        fillColor: [4, 65, 99],
+        textColor: 255,
+        fontSize: 10,
+        halign: 'start',
+        cellPadding: 3,
+      },
+      styles: {
+        fontSize: 10,
+        textColor: 0,
+        cellPadding: 3,
+      },
+    });
 
-  doc.setFontSize(12);
-  doc.setFont('Arial', 'bold');
+    doc.setFontSize(12);
+    doc.setFont('Arial', 'bold');
     doc.text(
       `Date: ${moment().format('DD-MM-YYYY HH:mm:ss')}`,
       15,
@@ -85,39 +86,51 @@ export const printPDF = async ({ TableInstance, reportName, columns = [] }) => {
   reader.readAsDataURL(logoData);
 };
 
-export const exportToExcel = async ({ TableInstance, reportName, columns = [] }) => {
-  const workbook = XLSX.utils.book_new();
-
-  const exportData = TableInstance.rows.map((row, index) => {
-    const { id = null, no = null, ID, ...rest } = row.original;
+export const exportToExcel = async ({
+  TableInstance,
+  reportName = 'Ingabo Syndicate Report',
+  columns = [],
+}) => {
+  const filteredData = TableInstance.rows.map((row, index) => {
+    const { id = null, no = null, ID, action = null, ...rest} = row.original;
     return {
       no: index + 1,
       ...rest,
     };
   });
 
-  const worksheet = XLSX.utils.json_to_sheet(exportData);
+  const header = columns
+    .filter((column) => !['actions', 'action'].includes(column?.accessor))
+    .map((column) => column?.Header);
 
-  // Add header row
-  XLSX.utils.sheet_add_aoa(worksheet, [columns.filter(column => column.accessor !== 'actions').map(column => column.Header.toUpperCase())], { origin: 'A1' });
+  const data = filteredData.map((row) => {
+    return columns.map((Header) => {
+      if (Header?.accessor === 'action') return null;
+      return Header?.accessor !== 'email'
+        ? capitalizeString(String(row[Header?.accessor || 'NO']))
+        : row[Header?.accessor];
+    }).filter((text) => !['Undefined, undefined'].includes(text));
+  });
 
-  // Add logo image
-  const logoResponse = await fetch(logo);
-  const logoData = await logoResponse.blob();
-  const logoBase64 = await convertBlobToBase64(logoData);
-  const logoImage = new Image();
-  logoImage.src = logoBase64;
-  const logoDataURI = logoImage.src;
 
-  // Add logo to the Excel sheet
-  const logoWS = XLSX.utils.sheet_add_aoa(XLSX.utils.aoa_to_sheet([[{ t: 's', s: { patternType: "solid", fgColor: { rgb: "FF000000" } }, v: "" }]]), [[{ t: "s", s: { patternType: "none" }, v: logoDataURI }]], { origin: 'A1' });
+  const csv = [
+    header,
+    ...data.map((row) => {
+      return row.map((cell) => {
+        return cell;
+      })?.filter((cell) => cell !== 'Undefined');
+    }),
+  ];
 
-  // Add logo dimensions
-  worksheet['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 1, c: 1 } }];
 
-  XLSX.utils.book_append_sheet(workbook, worksheet, reportName);
+  const csvContent = `data:text/csv;charset=utf-8,${csv
+    .map((row) => row.join(','))
+    .join('\n')}`;
 
-  const filename = `${reportName}.xlsx`;
-
-  XLSX.writeFile(workbook, filename);
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement('a');
+  link.setAttribute('href', encodedUri);
+  link.setAttribute('download', `${reportName}.csv`);
+  document.body.appendChild(link);
+  link.click();
 };
