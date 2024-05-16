@@ -41,7 +41,7 @@ export const printPDF = async ({ TableInstance, reportName, columns = [] }) => {
 
     const exportData = TableInstance.rows.map((row, index) => {
       // eslint-disable-next-line no-unused-vars
-      const { id = null, no = null, ID, assignees = null, ...rest } = row.original;
+      const { id = null, no = null, ID, ...rest } = row.original;
       return {
         no: noValues[index],
         ...rest,
@@ -53,7 +53,6 @@ export const printPDF = async ({ TableInstance, reportName, columns = [] }) => {
       columns: columns.filter((column) => !['actions', 'action'].includes(column.accessor)).map((column) => column.Header.toUpperCase()),
       body: exportData.map((row, index) => {
         const rowData = columns.map((header) => {
-          if (header.accessor === 'assignees') return null;
           return row[header?.accessor || 'NO'];
         })
         return { index, ...rowData };
@@ -106,7 +105,7 @@ export const exportToExcel = async ({
 
   const data = filteredData.map((row) => {
     return columns.map((Header) => {
-      if (['action', 'actions', 'assignees'].includes(Header.accessor)) return null;
+      if (['action', 'actions'].includes(Header?.accessor)) return null;
       return Header?.accessor !== 'email'
         ? capitalizeString(String(row[Header?.accessor || 'NO']))
         : row[Header?.accessor];

@@ -1,7 +1,6 @@
 import { Controller, useForm } from 'react-hook-form';
 import Input from '../components/inputs/Input';
 import Button from '../components/inputs/Button';
-import Loading from '../components/Loading';
 import { useLoginMutation } from '../redux/api/apiSlice';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -116,10 +115,6 @@ const Login = () => {
             />
           </span>
           <span className="flex flex-col gap-2 items-center w-full">
-            <span className="flex items-center gap-2">
-              <p>Forgot Password? </p>
-              <Button value="Reset here" background={false} className="!p-0" />
-            </span>
             <Controller
               name="submit"
               control={control}

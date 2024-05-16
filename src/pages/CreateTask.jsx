@@ -100,19 +100,6 @@ const CreateTask = () => {
           <h1 className="font-semibold text-[18px] uppercase">Create Task</h1>
           <span className="flex items-center gap-3">
             <Button
-              className="!p-2 !px-3"
-              submit
-              value={
-                <span className="flex items-center gap-2">
-                  <FontAwesomeIcon icon={faFloppyDisk} />
-                  Save Draft
-                </span>
-              }
-              onClick={(e) => {
-                e.preventDefault();
-              }}
-            />
-            <Button
               route="/tasks"
               background={false}
               value={<FontAwesomeIcon icon={faX} />}

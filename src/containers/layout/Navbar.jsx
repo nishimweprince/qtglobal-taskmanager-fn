@@ -19,11 +19,7 @@ const Navbar = () => {
     {
       title: 'Home',
       path: '/',
-    },
-    {
-      title: 'Tasks',
-      path: '/tasks',
-    },
+    }
   ];
 
   if (pathname.startsWith('/auth')) {

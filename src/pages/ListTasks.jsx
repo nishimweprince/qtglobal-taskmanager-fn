@@ -80,15 +80,6 @@ const ListTasks = () => {
     {
       Header: 'Assignees',
       accessor: 'assignees',
-      Cell: ({ row }) => (
-        <menu className="flex flex-col items-start gap-[3px] w-full">
-          {row?.original?.assignees?.map((assignee, index) => {
-            return (
-              <p key={index} className="text-[12px] p-1 rounded-md shadow-xs bg-slate-100 w-full text-center transition-all hover:scale-[1.03] duration-200 cursor-pointer">{assignee?.name}</p>
-            )
-          })}
-        </menu>
-      ),
     },
     {
       id: 'draft',
@@ -185,6 +176,7 @@ const ListTasks = () => {
                   draft: task?.draft ? 'Yes' : 'No',
                   added_by: task?.user?.name,
                   created_at: moment(task?.createdAt).format('YYYY-MM-DD'),
+                  assignees: task?.assignees?.map((assignee) => assignee?.name)?.join(', '),
                 };
               })}
           />
